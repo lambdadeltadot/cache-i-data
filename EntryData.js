@@ -1,4 +1,4 @@
-const parseTTL = require("./utils/parseTTL");
+const parseTTL = require('./utils/parseTTL');
 
 /**
  * The date to be serialized and save to the cache.
