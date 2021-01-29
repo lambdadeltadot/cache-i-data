@@ -22,8 +22,12 @@ class EntryData {
       throw new TypeError(`parsed key must be a string, given ${typeof key}`);
     }
 
-    if (expiration !== null || typeof expiration !== 'string') {
+    if (expiration !== null && typeof expiration !== 'string') {
       throw new TypeError(`parsed expiration must be a string or null, given ${typeof expiration}`);
+    }
+
+    if (expiration && new Date(expiration).toISOString() !== expiration) {
+      throw new Error('parsed expiration has invalid format');
     }
 
     return new EntryData(key, value, expiration);
@@ -67,7 +71,7 @@ class EntryData {
    * @return {boolean} true if expired, otherwise false
    */
   isExpired () {
-    return !!this.expiration && this.expiration.getTime() >= Date.now();
+    return !!this.expiration && this.expiration.getTime() < Date.now();
   }
 
   /**
@@ -76,7 +80,7 @@ class EntryData {
    * @return {null|number} the remaining ttl in millis, or null if no expiration
    */
   remainingTTL () {
-    return this.expiration && (Date.now() - this.expiration.getTime());
+    return this.expiration && (this.expiration.getTime() - Date.now());
   }
 
   /**
