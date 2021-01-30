@@ -19,7 +19,7 @@ Cache data object and utilities for [cache-i](https://github.com/lambdadeltadot/
     - [serialize](#serialize)
 * [Utilities](#utilities)
   + [isValidDate](#isvaliddate)
-  + [offsetFromNow (offset)](#offsetfromnow--offset-)
+  + [offsetFromNow (offset)](#offsetfromnow)
   + [parseTTL](#parsettl)
 * [Tests](#tests)
 * [Contributing](#contributing)
@@ -227,7 +227,7 @@ console.log(isValidDate(new Date())); // true
 console.log(isValidDate(new Date(NaN)); // false
 ```
 
-### offsetFromNow (offset)
+### offsetFromNow
 
 ```
 offsetFromNow(offset)
