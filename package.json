@@ -31,6 +31,9 @@
     "url": "https://github.com/lambdadeltadot/cache-i-data/issues"
   },
   "homepage": "https://github.com/lambdadeltadot/cache-i-data#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.20",
     "eslint": "^7.18.0",
