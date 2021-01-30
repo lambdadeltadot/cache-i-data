@@ -5,4 +5,4 @@
  *
  * @returns {boolean} true if it is a valid date, otherwise false
  */
-module.exports = date => !date.toString().toLowerCase().includes('invalid');
+module.exports = date => !(/invalid/i.test(date.toString()));

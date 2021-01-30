@@ -7,7 +7,7 @@ const offsetFromNow = require('./offsetFromNow');
  *
  * @param {any} ttl     the ttl value to parse
  *
- * @returns {null|Date} the expiration date, or null if no expiration
+ * @returns {null|Date} the expiration date, or null if given is null
  *
  * @throws {TypeError}  when ttl has invalid type or format
  */

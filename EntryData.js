@@ -1,7 +1,7 @@
 const parseTTL = require('./utils/parseTTL');
 
 /**
- * The date to be serialized and save to the cache.
+ * The `EntryData` class stores the data about an cache entry, which includes the `key`, `value`, and `expiration` of the entry data.
  */
 class EntryData {
   /**
@@ -9,7 +9,10 @@ class EntryData {
    *
    * @param {string} text the serialized string to parse
    *
-   * @returns {EntryData} the parsed entry data
+   * @returns {EntryData} the parsed entry data instance
+   *
+   * @throws {TypeError}  when any of parsed data has invalid type
+   * @throws {Error}      when the parsed expiration string is not a valid ISO date string
    */
   static parse (text) {
     const {
@@ -34,11 +37,11 @@ class EntryData {
   }
 
   /**
-   * Create an instance of Entry Data.
+   * Creates an instance of Entry Data.
    *
    * @param {string}            key   the key for this entry
    * @param {any}               value the value to be saved to the cache
-   * @param {null|number|Date}  ttl   the expiration date, or the time to live in millis, or null if does not expire
+   * @param {null|number|Date}  ttl   the expiration date, or the time to live in milliseconds, or null if does not expire
    *
    * @throws {TypeError}              when the ttl has invalid type or format
    */
@@ -58,7 +61,7 @@ class EntryData {
     this.key = `${key}`;
 
     /**
-     * The value to be saved.
+     * The value of this entry.
      *
      * @type {any}
      */
@@ -68,23 +71,24 @@ class EntryData {
   /**
    * Checks if this data already expired.
    *
-   * @return {boolean} true if expired, otherwise false
+   * @return {boolean} true if expiration date already past now, otherwise false, also return false if expiration is null
    */
   isExpired () {
     return !!this.expiration && this.expiration.getTime() < Date.now();
   }
 
   /**
-   * Get the remaining TTL in millis.
+   * Get the difference in milliseconds between the expiration date and now.
    *
-   * @return {null|number} the remaining ttl in millis, or null if no expiration
+   * @return {null|number} the remaining ttl in milliseconds, or null if no expiration
    */
   remainingTTL () {
     return this.expiration && (this.expiration.getTime() - Date.now());
   }
 
   /**
-   * Serializes to a string.
+   * Convert this data into serializable string. Note that this uses `JSON.stringify` so
+   * make sure that the value of this data is serializable by it.
    *
    * @returns {string}
    */
