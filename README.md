@@ -44,6 +44,13 @@ const EntryData = require('@lambdadeltadot/cache-i-data');
 const entry = new EntryData('key', 'value', 10 * 1000);
 ```
 
+Creates an entry with key and value that expires after 10 seconds using numeric string.
+
+```js
+const EntryData = require('@lambdadeltadot/cache-i-data');
+const entry = new EntryData('key', 'value', '10000');
+```
+
 Creates an entry with key and value that does not expires.
 
 ```js
