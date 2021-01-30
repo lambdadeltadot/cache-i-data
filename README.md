@@ -5,22 +5,22 @@ Cache data object and utilities for [cache-i](https://github.com/lambdadeltadot/
 
 * [Installation](#installation)
 * [EntryData](#entrydata)
-  + [constructor (key, value, ttl)](#constructor--key--value--ttl-)
+  + [constructor](#constructor)
     - [Example Usage](#example-usage)
   + [Public Properties](#public-properties)
     - [key](#key)
     - [value](#value)
     - [expiration](#expiration)
   + [Static Methods](#static-methods)
-    - [parse (text)](#parse--text-)
+    - [parse](#parse)
   + [Instance Method](#instance-method)
-    - [isExpired ()](#isexpired---)
-    - [remainingTTL ()](#remainingttl---)
-    - [serialize ()](#serialize---)
+    - [isExpired](#isexpired)
+    - [remainingTTL](#remainingttl)
+    - [serialize](#serialize)
 * [Utilities](#utilities)
-  + [isValidDate (date)](#isvaliddate--date-)
+  + [isValidDate](#isvaliddate)
   + [offsetFromNow (offset)](#offsetfromnow--offset-)
-  + [parseTTL (ttl)](#parsettl--ttl-)
+  + [parseTTL](#parsettl)
 * [Tests](#tests)
 * [Contributing](#contributing)
 
@@ -42,7 +42,11 @@ yarn add @lambdadeltadot/cache-i-data
 
 The `EntryData` class stores the data about an cache entry, which includes the `key`, `value`, and `expiration` of the entry data.
 
-### constructor (key, value, ttl)
+### constructor
+
+```
+constructor (key, value, ttl)
+```
 
 Creates an instance of Entry Data.
 
@@ -130,7 +134,11 @@ The expiration date for the entry.
 
 Below are the static methods of this class:
 
-#### parse (text)
+#### parse
+
+```
+Entry.parse(text)
+```
 
 Parses the serialized string into an Entry Data.
 
@@ -152,7 +160,11 @@ const parsedData = EntryData.parse(text);
 
 Below are the instance methods of this class:
 
-#### isExpired ()
+#### isExpired
+
+```
+EntryData.prototype.isExpired()
+```
 
 Checks if this data already expired.
 
@@ -164,7 +176,11 @@ if (data.isExpired()) {
 }
 ```
 
-#### remainingTTL ()
+#### remainingTTL
+
+```
+EntryData.prototype.remainingTTL()
+```
 
 Get the difference in milliseconds between the expiration date and now.
 
@@ -175,7 +191,11 @@ const data = new EntryData('key', 'value', 20 * 1000);
 const data2 = new EntryData('key2', 'value2', data.remainingTTL());
 ```
 
-#### serialize ()
+#### serialize
+
+```
+EntryData.prototype.serialize()
+```
 
 Convert this data into serializable string. Note that this uses `JSON.stringify` so make sure that the value of this data is serializable by it.
 
@@ -190,7 +210,11 @@ Cache.set(data.key, data.serialize(), data.remainingTTL() / 1000);
 
 This are the utilities function that you can use on implementations.
 
-### isValidDate (date)
+### isValidDate
+
+```
+isValidDate(date)
+```
 
 Checks if the given date object has a valid value.
 
@@ -205,6 +229,10 @@ console.log(isValidDate(new Date(NaN)); // false
 
 ### offsetFromNow (offset)
 
+```
+offsetFromNow(offset)
+```
+
 Get the date with the given offset from now.
 
 - **Param** `{number} offset`: the offset in milliseconds
@@ -215,7 +243,11 @@ const offsetFromNow = require('@lambdadeltadot/cache-i-data/offsetFromNow');
 console.log(offsetFromNow(10 * 1000)); // 10 seconds from now
 ```
 
-### parseTTL (ttl)
+### parseTTL
+
+```
+parseTTL(ttl)
+```
 
 Parses the given TTL into an expiration date.
 
