@@ -33,35 +33,35 @@ Creates an instance of Entry Data.
 Creates an entry with key and value that expires on `January 1, 2020 00:00:00`:
 
 ```js
-const EntryData = require('@lambdadelta/cache-i');
+const EntryData = require('@lambdadelta/cache-i-data');
 const entry = new EntryData('key', 'value', new Date('2020-01-01 00:00:00'));
 ```
 
 Creates an entry with key and value that expires after 10 seconds.
 
 ```js
-const EntryData = require('@lambdadelta/cache-i');
+const EntryData = require('@lambdadelta/cache-i-data');
 const entry = new EntryData('key', 'value', 10 * 1000);
 ```
 
 Creates an entry with key and value that does not expires.
 
 ```js
-const EntryData = require('@lambdadelta/cache-i');
+const EntryData = require('@lambdadelta/cache-i-data');
 const entry = new EntryData('key', 'value', null);
 ```
 
 You can pass anything to the value parameter.
 
 ```js
-const EntryData = require('@lambdadelta/cache-i');
+const EntryData = require('@lambdadelta/cache-i-data');
 const entry = new EntryData('key', { a: 1 }, null);
 ```
 
 The key will always be converted to string.
 
 ```js
-const EntryData = require('@lambdadelta/cache-i');
+const EntryData = require('@lambdadelta/cache-i-data');
 
 const numberKey = new EntryData(1, { a: 1 }, null);
 console.log(numberKey.key); // '1'
@@ -110,7 +110,7 @@ Parses the serialized string into an Entry Data.
 - **Throws** `{Error}`: when the parsed expiration string is not a valid ISO date string
 
 ```js
-const EntryData = require('@lambdadelta/cache-i');
+const EntryData = require('@lambdadelta/cache-i-data');
 
 const data = new EntryData('key', 'value', new Date());
 const text = data.serialize();
