@@ -44,6 +44,21 @@ class EntryData {
   remainingTTL () {
     return this.expiration && (this.expiration.getTime() - Date.now());
   }
+
+  /**
+   * Converts this data into a serialized string. Note that this uses `JSON.stringify` under the
+   * hood, so make sure the value for this data is serializable by it.
+   *
+   * @returns {string}
+   */
+  serialize () {
+    const data = {
+      exp: this.expiration && this.expiration.toISOString(),
+      val: this.value
+    };
+
+    return JSON.stringify(data);
+  }
 }
 
 module.exports = EntryData;
