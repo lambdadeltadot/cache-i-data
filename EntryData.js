@@ -35,6 +35,15 @@ class EntryData {
   isExpired () {
     return !!this.expiration && this.expiration.getTime() < Date.now();
   }
+
+  /**
+   * Get the difference in milliseconds between the expiration date and now.
+   *
+   * @returns {null|number} the remaining ttl in milliseconds, or null if does not expire
+   */
+  remainingTTL () {
+    return this.expiration && (this.expiration.getTime() - Date.now());
+  }
 }
 
 module.exports = EntryData;
