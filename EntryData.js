@@ -8,6 +8,34 @@ const parseTTL = require('./utils/parseTTL');
  */
 class EntryData {
   /**
+   * Parses the text into a EntryData instance.
+   *
+   * @param {string} text the text to parse
+   *
+   * @returns {EntryData<T>}
+   *
+   * @template T
+   */
+  static parse (text) {
+    const {
+      exp,
+      val
+    } = JSON.parse(text);
+
+    if (exp !== null && typeof exp !== 'string') {
+      throw new TypeError('invalid expiration type');
+    }
+
+    const ttl = exp && new Date(exp);
+
+    if (exp && ttl.toISOString() !== exp) {
+      throw new TypeError('invalid expiration format');
+    }
+
+    return new EntryData(val, ttl);
+  }
+
+  /**
    * Creates an instance of EntryData.
    *
    * @param {T} value the value to be bound to this entry data
