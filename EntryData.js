@@ -1,77 +1,68 @@
 const parseTTL = require('./utils/parseTTL');
 
 /**
- * The `EntryData` class stores the data about an cache entry, which includes the `key`, `value`, and `expiration` of the entry data.
+ * The `EntryData` class stores the data about an cache entry,
+ * which includes the `value`, and `expiration` of the entry data.
+ *
+ * @template T
  */
 class EntryData {
   /**
-   * Parses the serialized string into an Entry Data.
+   * Parses the text into a EntryData instance.
    *
-   * @param {string} text the serialized string to parse
+   * @param {string} text The text to parse.
    *
-   * @returns {EntryData} the parsed entry data instance
+   * @returns {EntryData<T>} The parsed entry data.
    *
-   * @throws {TypeError}  when any of parsed data has invalid type
-   * @throws {Error}      when the parsed expiration string is not a valid ISO date string
+   * @template T
+   *
+   * @throws {TypeError} when any of parsed data has invalid type or format
    */
   static parse (text) {
     const {
-      expiration,
-      key,
-      value
+      exp,
+      val
     } = JSON.parse(text);
 
-    if (typeof key !== 'string') {
-      throw new TypeError(`parsed key must be a string, given ${typeof key}`);
+    if (exp !== null && typeof exp !== 'string') {
+      throw new TypeError('invalid expiration type');
     }
 
-    if (expiration !== null && typeof expiration !== 'string') {
-      throw new TypeError(`parsed expiration must be a string or null, given ${typeof expiration}`);
+    const ttl = exp && new Date(exp);
+
+    if (exp && ttl.toISOString() !== exp) {
+      throw new TypeError('invalid expiration format');
     }
 
-    if (expiration && new Date(expiration).toISOString() !== expiration) {
-      throw new Error('parsed expiration has invalid format');
-    }
-
-    return new EntryData(key, value, expiration);
+    return new EntryData(val, ttl);
   }
 
   /**
-   * Creates an instance of Entry Data.
+   * Creates an instance of EntryData.
    *
-   * @param {string}            key   the key for this entry
-   * @param {any}               value the value to be saved to the cache
-   * @param {null|number|Date}  ttl   the expiration date, or the time to live in milliseconds, or null if does not expire
+   * @param {T} value The value to be bound to this entry data.
+   * @param {null|number|Date} ttl The time to live in milliseconds if number, the expiration date if Date, or no expiration if null.
    *
-   * @throws {TypeError}              when the ttl has invalid type or format
+   * @throws {TypeError} when the ttl has an invalid type or format
    */
-  constructor (key, value, ttl) {
+  constructor (value, ttl) {
     /**
-     * The expiration date for the entry.
-     *
-     * @type {null|Date}
+     * The expiration of this entry data.
      */
     this.expiration = parseTTL(ttl);
 
     /**
-     * The key for this entry.
+     * The value bound to this entry.
      *
-     * @type {string}
-     */
-    this.key = `${key}`;
-
-    /**
-     * The value of this entry.
-     *
-     * @type {any}
+     * @type {T}
      */
     this.value = value;
   }
 
   /**
-   * Checks if this data already expired.
+   * Checks if this data is already expired.
    *
-   * @return {boolean} true if expiration date already past now, otherwise false, also return false if expiration is null
+   * @returns {boolean} true if expiration date already past now, otherwise false, always return false if expiration is null
    */
   isExpired () {
     return !!this.expiration && this.expiration.getTime() < Date.now();
@@ -80,20 +71,25 @@ class EntryData {
   /**
    * Get the difference in milliseconds between the expiration date and now.
    *
-   * @return {null|number} the remaining ttl in milliseconds, or null if no expiration
+   * @returns {null|number} the remaining ttl in milliseconds, or null if does not expire
    */
   remainingTTL () {
     return this.expiration && (this.expiration.getTime() - Date.now());
   }
 
   /**
-   * Convert this data into serializable string. Note that this uses `JSON.stringify` so
-   * make sure that the value of this data is serializable by it.
+   * Converts this data into a serialized string. Note that this uses `JSON.stringify` under the
+   * hood, so make sure the value for this data is serializable by it.
    *
    * @returns {string}
    */
   serialize () {
-    return JSON.stringify(this);
+    const data = {
+      exp: this.expiration && this.expiration.toISOString(),
+      val: this.value
+    };
+
+    return JSON.stringify(data);
   }
 }
 
