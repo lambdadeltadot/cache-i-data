@@ -1,8 +1,8 @@
 const parseTTL = require('./utils/parseTTL');
 
 /**
- * The `EntryData` class stores the data about an cache entry, which includes
- * the `value`, and `expiration` of the entry data.
+ * The `EntryData` class stores the data about an cache entry,
+ * which includes the `value`, and `expiration` of the entry data.
  *
  * @template T
  */
@@ -10,11 +10,13 @@ class EntryData {
   /**
    * Parses the text into a EntryData instance.
    *
-   * @param {string} text the text to parse
+   * @param {string} text The text to parse.
    *
-   * @returns {EntryData<T>}
+   * @returns {EntryData<T>} The parsed entry data.
    *
    * @template T
+   *
+   * @throws {TypeError} when any of parsed data has invalid type or format
    */
   static parse (text) {
     const {
@@ -38,8 +40,10 @@ class EntryData {
   /**
    * Creates an instance of EntryData.
    *
-   * @param {T} value the value to be bound to this entry data
-   * @param {null|number|Date} ttl the time to live in milliseconds if number, the expiration date if Date, or no expiration if null
+   * @param {T} value The value to be bound to this entry data.
+   * @param {null|number|Date} ttl The time to live in milliseconds if number, the expiration date if Date, or no expiration if null.
+   *
+   * @throws {TypeError} when the ttl has an invalid type or format
    */
   constructor (value, ttl) {
     /**

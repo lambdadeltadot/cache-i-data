@@ -1,0 +1,13 @@
+## 1.0.0 (February 17, 2021)
+
+## EntryData
+
+- removes `key` property
+
+## isValidDate
+
+- use `isNaN` checking of the result of `getTime()` instead of checking if stringified data has `invalid date` substring
+
+## 0.1.0 (January 30, 2021)
+
+- Initial Release

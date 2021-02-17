@@ -40,20 +40,20 @@ yarn add @lambdadeltadot/cache-i-data
 
 ## EntryData
 
-The `EntryData` class stores the data about an cache entry, which includes the `key`, `value`, and `expiration` of the entry data.
+The `EntryData` class stores the data about an cache entry, which includes the `value`, and `expiration` of the entry data.
 
 ### constructor
 
 ```
-constructor (key, value, ttl)
+constructor (value, ttl)
 ```
 
 Creates an instance of Entry Data.
 
-- **Param** `{string} key`: the key for this entry
-- **Param** `{any} value`: the value to be saved to the cache
-- **Param** `{null|number|Date} ttl`: the expiration date, or the time to live in milliseconds, or null if does not expire
-- **Throws** `{TypeError}`: when any of parsed data has invalid type or format
+- **Generic Type** `{T}`: The type of the value to be saved.
+- **Param** `{T} value`: The value to be bound to this entry data.
+- **Param** `{null|number|Date} ttl`: The time to live in milliseconds if number, the expiration date if Date, or no expiration if null.
+- **Throws** `{TypeError}`: when the ttl has an invalid type or format
 
 #### Example Usage
 
@@ -61,72 +61,48 @@ Creates an entry with key and value that expires on `January 1, 2020 00:00:00`:
 
 ```js
 const EntryData = require('@lambdadeltadot/cache-i-data');
-const entry = new EntryData('key', 'value', new Date('2020-01-01 00:00:00'));
+const entry = new EntryData('value', new Date('2020-01-01 00:00:00'));
 ```
 
 Creates an entry with key and value that expires after 10 seconds.
 
 ```js
 const EntryData = require('@lambdadeltadot/cache-i-data');
-const entry = new EntryData('key', 'value', 10 * 1000);
+const entry = new EntryData('value', 10 * 1000);
 ```
 
 Creates an entry with key and value that expires after 10 seconds using numeric string.
 
 ```js
 const EntryData = require('@lambdadeltadot/cache-i-data');
-const entry = new EntryData('key', 'value', '10000');
+const entry = new EntryData('value', '10000');
 ```
 
 Creates an entry with key and value that does not expires.
 
 ```js
 const EntryData = require('@lambdadeltadot/cache-i-data');
-const entry = new EntryData('key', 'value', null);
+const entry = new EntryData('value', null);
 ```
 
 You can pass anything to the value parameter.
 
 ```js
 const EntryData = require('@lambdadeltadot/cache-i-data');
-const entry = new EntryData('key', { a: 1 }, null);
-```
-
-The key will always be converted to string.
-
-```js
-const EntryData = require('@lambdadeltadot/cache-i-data');
-
-const numberKey = new EntryData(1, { a: 1 }, null);
-console.log(numberKey.key); // '1'
-
-const nullKey = new EntryData(null, { a: 1 }, null);
-console.log(nullKey.key); // 'null'
-
-const objectKey = new EntryData({}, { a: 1 }, null);
-console.log(objectKey.key); // '[object Object]'
-
-const undefinedKey = new EntryData(undefined, { a: 1 }, null);
-console.log(objectKey.key); // 'undefined'
+const entry = new EntryData({ a: 1 }, null);
 ```
 
 ### Public Properties
 
-#### key
-
-The key for this entry.
-
-- **Type** `{string}`
-
 #### value
 
-The value of this entry.
+The value bound to this entry.
 
-- **Type** `{any}`
+- **Type** `{T}`
 
 #### expiration
 
-The expiration date for the entry.
+The expiration of this entry data.
 
 - **Type** `{null|Date}`
 
@@ -140,12 +116,12 @@ Below are the static methods of this class:
 Entry.parse(text)
 ```
 
-Parses the serialized string into an Entry Data.
+Parses the text into a EntryData instance.
 
-- **Param** `{string} text`: the serialized string to parse
-- **Returns** `{EntryData}`: the parsed entry data instance
-- **Throws** `{TypeError}`: when any of parsed data has invalid type
-- **Throws** `{Error}`: when the parsed expiration string is not a valid ISO date string
+- **Generic Type** `{T}`: The type of the value for the parsed data.
+- **Param** `{string} text`: The text to parse.
+- **Returns** `{EntryData<T>}`: The parsed entry data.
+- **Throws** `{TypeError}`: when any of parsed data has invalid type or format
 
 ```js
 const EntryData = require('@lambdadeltadot/cache-i-data');
@@ -166,9 +142,9 @@ Below are the instance methods of this class:
 EntryData.prototype.isExpired()
 ```
 
-Checks if this data already expired.
+Checks if this data is already expired.
 
-- **Returns** `{boolean}`: true if expiration date already past now, otherwise false, also return false if expiration is null
+- **Returns** `{boolean}`: true if expiration date already past now, otherwise false, always return false if expiration is null
 
 ```js
 if (data.isExpired()) {
@@ -184,7 +160,7 @@ EntryData.prototype.remainingTTL()
 
 Get the difference in milliseconds between the expiration date and now.
 
-- **Returns** `{null|number}`: the remaining TTL in milliseconds, or null if no expiration
+- **Returns** `{null|number}`: the remaining ttl in milliseconds, or null if does not expire
 
 ```js
 const data = new EntryData('key', 'value', 20 * 1000);
@@ -197,19 +173,18 @@ const data2 = new EntryData('key2', 'value2', data.remainingTTL());
 EntryData.prototype.serialize()
 ```
 
-Convert this data into serializable string. Note that this uses `JSON.stringify` so make sure that the value of this data is serializable by it.
+Converts this data into a serialized string. Note that this uses `JSON.stringify` under the hood, so make sure the value for this data is serializable by it.
 
 - **Returns** `{string}`
 
 ```js
 const data = new EntryData('key', 'value', new Date());
-Cache.set(data.key, data.serialize(), data.remainingTTL() / 1000);
+Cache.set(data.key, data.serialize(), data.remainingTTL());
 ```
 
 ## Utilities
 
-This are the utilities function that you can use on implementations.
-
+This are the utilities function that you can use.
 ### isValidDate
 
 ```
